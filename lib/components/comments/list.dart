@@ -7,42 +7,41 @@ import '../../models/user.dart';
 import '../../provider/comment_provider.dart';
 import 'comment/container.dart';
 
-class CommentList extends StatefulWidget {
+class CommentList extends StatelessWidget {
   const CommentList({super.key});
 
   @override
-  State<CommentList> createState() => _CommentListState();
-}
-
-class _CommentListState extends State<CommentList> {
-  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CommentCrudProvider(),
-      child: Consumer2<CommentProvider, CommentCrudProvider>(
-        builder: (context, commentProvider, commentCrudProvider, child) {
-          final List<Comment> comments = commentProvider.getCommentsWithoutReplies();
-          final List<User> users = commentProvider.users;
-          return Expanded(
-            child: ListView.builder(
-              itemCount: comments.length,
-              itemBuilder: (context, index) {
-                final Comment comment = comments[index];
-                final User user = users.firstWhere(
-                    (value) => value.id == comments[index].userAddId);
-                  return Column(
-                    children: [
-                      CommentContainer(
-                          user: user,
-                          comment: comment),
-                      SizedBox(height: 16)
-                    ],
-                  );
-                }
-            ),
-          );
-        },
-      ),
+    return Consumer<CommentProvider>(
+      builder: (context, commentProvider, child) {
+        final List<Comment> comments =
+        commentProvider.getCommentsWithoutReplies();
+        final List<User> users = commentProvider.users;
+
+        return Expanded(
+          child: ListView.builder(
+            itemCount: comments.length,
+            itemBuilder: (context, index) {
+              final Comment comment = comments[index];
+              final User user = users.firstWhere(
+                      (value) => value.id == comments[index].userAddId);
+
+              return Column(
+                children: [
+                  ChangeNotifierProvider(
+                    create: (_) => CommentCrudProvider(),
+                    child: CommentContainer(
+                      user: user,
+                      comment: comment,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

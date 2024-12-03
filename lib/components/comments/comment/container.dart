@@ -22,54 +22,51 @@ class CommentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<CommentCrudProvider, CommentProvider>(
-      builder: (context, commentCrudProvider, commentProvider, child) {
+    return Consumer2<CommentProvider, CommentCrudProvider>(
+      builder: (context, commentProvider, commentCrudProvider, child) {
         final List<Comment> replies = commentProvider.comments
             .where((value) => value.parentId == comment.id)
             .toList();
         final List<User> users = commentProvider.users;
+
         return Column(
           children: [
             CommentCard(user: user, comment: comment),
-            Column(
-              children: [
-                if (commentCrudProvider.isReplyVisible)
-                  Column(
-                    children: [
-                      ReplyForm(parentId: comment.id),
-                    ],
+            if (commentCrudProvider.isReplyVisible)
+              ReplyForm(parentId: comment.id),
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: replies.length,
+              itemBuilder: (context, index) {
+                final Comment replyComment = replies[index];
+                final User replyUser = users.firstWhere(
+                        (value) => value.id == replyComment.userAddId);
+
+                return Container(
+                  margin: EdgeInsets.only(top: index == 0 ? 16 : 0),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    top: index == 0 ? 0 : 8,
+                    bottom: index == replies.length - 1 ? 0 : 8,
                   ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: replies.length,
-                  itemBuilder: (context, index) {
-                    final Comment comment = replies[index];
-                    final User user = users.firstWhere(
-                        (value) => value.id == replies[index].userAddId);
-                    return Container(
-                      margin: EdgeInsets.only(top: index == 0 ? 16 : 0),
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        top: index == 0 ? 0 : 8,
-                        bottom: index == replies.length - 1 ? 0 : 8,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(
+                        color: Color.fromRGBO(233, 235, 240, 1),
+                        width: 2,
                       ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
-                            color: Color.fromRGBO(233, 235, 240, 1),
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      child: CommentContainer(
-                        user: user,
-                        comment: comment,
-                      ),
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  ),
+                  child: ChangeNotifierProvider(
+                    create: (_) => CommentCrudProvider(),
+                    child: CommentContainer(
+                      user: replyUser,
+                      comment: replyComment,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         );
@@ -77,6 +74,7 @@ class CommentContainer extends StatelessWidget {
     );
   }
 }
+
 
 class CommentCard extends StatelessWidget {
   final Comment comment;
