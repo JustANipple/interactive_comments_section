@@ -5,8 +5,10 @@ import '../models/comment.dart';
 import '../models/user.dart';
 
 class CommentProvider with ChangeNotifier {
+  final GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
   final TextEditingController sendTextController = TextEditingController();
   final TextEditingController replyTextController = TextEditingController();
+  final TextEditingController editTextController = TextEditingController();
   final int userAddId = 1;
 
   CommentDatabase database = CommentDatabase(); // Use a single instance
@@ -55,6 +57,20 @@ class CommentProvider with ChangeNotifier {
     }
   }
 
+  Future<void> submitEdit(BuildContext context, GlobalKey<FormState> formKey, int? id) async {
+    if (formKey.currentState?.validate() ?? false) {
+      String text = editTextController.text.trim();
+      final DateTime dateUpd = DateTime.now();
+      Comment comment = comments.where((value) => value.id == id).first;
+      comment.text = text;
+      comment.dateUpdate = dateUpd;
+
+      await database.updateComment(comment);
+
+      await loadComments();
+    }
+  }
+
   Future<void> loadComments() async {
     _comments = await database.readComments();
     notifyListeners();
@@ -87,15 +103,19 @@ class CommentProvider with ChangeNotifier {
 
   Future<void> addLike(int? id) async {
     Comment comment = comments.firstWhere((value) => value.id == id);
-    comment.likes = comment.likes! + 1;
-    await database.updateComment(comment);
-    notifyListeners();
+    if (comment.userUpdateId != userAddId) {
+      comment.likes = comment.likes! + 1;
+      comment.userUpdateId = userAddId;
+      await database.updateComment(comment);
+      notifyListeners();
+    }
   }
 
   Future<void> removeLike(int? id) async {
     Comment comment = comments.firstWhere((value) => value.id == id);
-    if (comment.likes! > 0) {
+    if (comment.likes! > 0 && comment.userUpdateId != userAddId) {
       comment.likes = comment.likes! - 1;
+      comment.userUpdateId = userAddId;
       await database.updateComment(comment);
       notifyListeners();
     }

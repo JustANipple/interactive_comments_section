@@ -34,7 +34,6 @@ class MainApp extends StatelessWidget {
             backgroundColor: const Color.fromRGBO(245, 246, 250, 1),
             body: Center(
               child: Container(
-                constraints: BoxConstraints(maxWidth: 375),
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                 child: Column(
                   children: [

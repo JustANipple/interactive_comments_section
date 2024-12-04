@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../models/comment.dart';
 import '../../../models/user.dart';
 import 'card/body.dart';
+import 'card/body_edit.dart';
 import 'card/footer.dart';
 import 'card/header.dart';
 import 'reply_form.dart';
@@ -40,8 +41,8 @@ class CommentContainer extends StatelessWidget {
               itemCount: replies.length,
               itemBuilder: (context, index) {
                 final Comment replyComment = replies[index];
-                final User replyUser = users.firstWhere(
-                        (value) => value.id == replyComment.userAddId);
+                final User replyUser = users
+                    .firstWhere((value) => value.id == replyComment.userAddId);
 
                 return Container(
                   margin: EdgeInsets.only(top: index == 0 ? 16 : 0),
@@ -75,7 +76,6 @@ class CommentContainer extends StatelessWidget {
   }
 }
 
-
 class CommentCard extends StatelessWidget {
   final Comment comment;
   final User user;
@@ -97,7 +97,10 @@ class CommentCard extends StatelessWidget {
           children: [
             CommentCardHeader(comment: comment, user: user),
             SizedBox(height: 16),
-            CommentCardBody(id: comment.id),
+            if (commentCrudProvider.isEditVisible)
+              CommentCardBodyEdit(id: comment.id!)
+            else
+              CommentCardBody(id: comment.id),
             SizedBox(height: 16),
             CommentCardFooter(id: comment.id),
           ],

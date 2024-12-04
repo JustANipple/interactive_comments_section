@@ -35,6 +35,11 @@ class CommentDatabase {
   }
 
   Future<void> _onCreate(Database db, int version) async {
+    DateTime oneMonthAgo = DateTime.now().subtract(const Duration(days: 30));
+    DateTime twoWeeksAgo = DateTime.now().subtract(const Duration(days: 14));
+    DateTime oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
+    DateTime twoDaysAgo = DateTime.now().subtract(const Duration(days: 2));
+
     await db.execute('''
       CREATE TABLE $_commentsTableName (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,10 +55,10 @@ class CommentDatabase {
     await db.execute('''
       INSERT INTO $_commentsTableName (parentId, text, likes, userAddId, userUpdateId, dateAdd, dateUpdate)
       VALUES
-        (NULL, 'Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You’ve nailed the design and the responsiveness at various breakpoints works really well.', 0, 4, 4, '2024-11-22T00:00:00.000000', '2024-11-01T00:00:00.000000'),
-        (NULL, 'Woah, your project looks awesome! How long have you been coding for? I’m still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!', 0, 3, 3, '2024-11-17T00:00:00.000000', '2024-11-22T00:00:00.000000'),
-        (2, '@maxblagun If you’re still new, I’d recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It’s very tempting to jump ahead but lay a solid foundation first.', 0, 2, 2, '2024-11-24T00:00:00.000000', '2024-11-22T00:00:00.000000'),
-        (2, '@ramsesmiron I couldn’t agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.', 0, 1, 1, '2024-11-29T00:00:00.000000', '2024-11-22T00:00:00.000000')
+        (NULL, 'Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You’ve nailed the design and the responsiveness at various breakpoints works really well.', 12, 4, 4, '${oneMonthAgo.toIso8601String()}', '${oneMonthAgo.toIso8601String()}'),
+        (NULL, 'Woah, your project looks awesome! How long have you been coding for? I’m still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!', 5, 3, 3, '${twoWeeksAgo.toIso8601String()}', '${twoWeeksAgo.toIso8601String()}'),
+        (2, '@maxblagun If you’re still new, I’d recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It’s very tempting to jump ahead but lay a solid foundation first.', 4, 2, 2, '${oneWeekAgo.toIso8601String()}', '${oneWeekAgo.toIso8601String()}'),
+        (2, '@ramsesmiron I couldn’t agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.', 2, 1, 1, '${twoDaysAgo.toIso8601String()}', '${twoDaysAgo.toIso8601String()}')
     ''');
     await db.execute('''
       CREATE TABLE $_usersTableName (

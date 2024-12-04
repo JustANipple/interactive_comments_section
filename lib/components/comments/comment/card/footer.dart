@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:interactive_comments_section/components/comments/comment/card/footer/reply_button.dart';
+import 'package:interactive_comments_section/provider/comment_crud_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../models/comment.dart';
@@ -7,6 +8,7 @@ import '../../../../provider/comment_provider.dart';
 import 'footer/delete_button.dart';
 import 'footer/edit_button.dart';
 import 'footer/likes.dart';
+import 'footer/update_button.dart';
 
 class CommentCardFooter extends StatelessWidget {
   final int? id;
@@ -18,8 +20,8 @@ class CommentCardFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CommentProvider>(
-      builder: (context, commentProvider, child) {
+    return Consumer2<CommentProvider, CommentCrudProvider>(
+      builder: (context, commentProvider, commentCrudProvider, child) {
         final Comment comment = commentProvider.getCommentById(id!);
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,7 +32,10 @@ class CommentCardFooter extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          DeleteButton(id: comment.id),
+                          if (commentCrudProvider.isEditVisible)
+                            UpdateButton(formKey: commentProvider.editFormKey, id: comment.id)
+                          else
+                            DeleteButton(id: comment.id),
                           EditButton(),
                         ],
                       ),
