@@ -9,7 +9,7 @@ class CommentProvider with ChangeNotifier {
   final TextEditingController sendTextController = TextEditingController();
   final TextEditingController replyTextController = TextEditingController();
   final TextEditingController editTextController = TextEditingController();
-  final int userAddId = 1;
+  int userAddId = 1;
 
   CommentDatabase database = CommentDatabase(); // Use a single instance
   List<Comment> _comments = [];
@@ -136,5 +136,10 @@ class CommentProvider with ChangeNotifier {
 
   List<Comment> getCommentsWithoutReplies() {
     return comments.where((comment) => comment.parentId == null).toList();
+  }
+
+  void setUser(int id) {
+    userAddId = id;
+    notifyListeners();
   }
 }

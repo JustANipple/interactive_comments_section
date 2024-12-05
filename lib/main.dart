@@ -1,18 +1,24 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:interactive_comments_section/components/post_form.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import 'components/comments/list.dart';
 import 'provider/comment_provider.dart';
 
 Future<void> main() async {
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
-
   WidgetsFlutterBinding.ensureInitialized();
+
+  if (kIsWeb) {
+    databaseFactory = databaseFactoryFfiWeb;
+  } else {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
 
   runApp(
     ChangeNotifierProvider(
