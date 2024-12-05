@@ -95,6 +95,7 @@ void showModal(BuildContext context) {
               ),
               SizedBox(height: 8),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   for (int i = 0; i < commentProvider.users.length; i++)
                     ListTile(

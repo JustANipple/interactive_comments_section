@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ Future<void> main() async {
 
   if (kIsWeb) {
     databaseFactory = databaseFactoryFfiWeb;
-  } else {
+  } else if (Platform.isWindows) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
@@ -36,6 +37,7 @@ class MainApp extends StatelessWidget {
     return Consumer<CommentProvider>(
       builder: (context, commentProvider, child) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: const Color.fromRGBO(245, 246, 250, 1),
             body: Center(
