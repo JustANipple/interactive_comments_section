@@ -30,26 +30,27 @@ class PostForm extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        padding: EdgeInsets.all(0),
-                        shape: CircleBorder(),
+                    if (commentProvider.users.isNotEmpty)
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          padding: EdgeInsets.all(0),
+                          shape: CircleBorder(),
+                        ),
+                        onPressed: () {
+                          showModal(context);
+                        },
+                        child: Image(
+                          image: AssetImage(commentProvider.users
+                              .where((value) =>
+                                  value.id == commentProvider.userAddId)
+                              .first
+                              .avatarImageUrl),
+                          width: 32,
+                          height: 32,
+                        ),
                       ),
-                      onPressed: () {
-                        showModal(context);
-                      },
-                      child: Image(
-                        image: AssetImage(commentProvider.users
-                            .where((value) =>
-                                value.id == commentProvider.userAddId)
-                            .first
-                            .avatarImageUrl),
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
                     SendButton(formKey: formKey),
                   ],
                 ),

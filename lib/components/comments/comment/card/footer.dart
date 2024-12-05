@@ -23,26 +23,29 @@ class CommentCardFooter extends StatelessWidget {
     return Consumer2<CommentProvider, CommentCrudProvider>(
       builder: (context, commentProvider, commentCrudProvider, child) {
         final Comment comment = commentProvider.getCommentById(id!);
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Likes(id: comment.id),
-            commentProvider.userAddId == comment.userAddId
-                ? Row(
-                    children: [
-                      Row(
-                        children: [
-                          if (commentCrudProvider.isEditVisible)
-                            UpdateButton(formKey: commentProvider.editFormKey, id: comment.id)
-                          else
-                            DeleteButton(id: comment.id),
-                          EditButton(),
-                        ],
-                      ),
-                    ],
-                  )
-                : ReplyButton(),
-          ],
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Likes(id: comment.id),
+              commentProvider.userAddId == comment.userAddId
+                  ? Row(
+                      children: [
+                        Row(
+                          children: [
+                            if (commentCrudProvider.isEditVisible)
+                              UpdateButton(formKey: commentProvider.editFormKey, id: comment.id)
+                            else
+                              DeleteButton(id: comment.id),
+                            EditButton(),
+                          ],
+                        ),
+                      ],
+                    )
+                  : ReplyButton(),
+            ],
+          ),
         );
       },
     );
