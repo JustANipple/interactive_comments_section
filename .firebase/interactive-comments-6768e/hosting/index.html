@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="/">
+
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="A new Flutter project.">
+
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="interactive_comments_section">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png"/>
+
+    <title>interactive_comments_section</title>
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        .loading {
+          display: flex;
+          margin: 0;
+          justify-content: center;
+          align-items: center;
+          width: 100vw;
+          height: 100vh;
+          background-color: #F5F6FA;
+          overflow: hidden;
+        }
+
+        .spinner {
+          border: 16px solid #E9EBF0;
+          border-top: 16px solid #5357B6;
+          border-radius: 50%;
+          width: 120px;
+          height: 120px;
+          animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+    </style>
+</head>
+<body class="loading">
+<main>
+    <div id="spinner" class="spinner"></div>
+    <script src="flutter_bootstrap.js" async></script>
+</main>
+</body>
+</html>
