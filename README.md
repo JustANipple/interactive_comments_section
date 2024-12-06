@@ -36,7 +36,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [GitHub](https://github.com/JustANipple/interactive_comments_section)
-- Live Site URL: [FireBae](https://interactive-comments-6768e.web.app/)
+- Live Site URL: [FireBase](https://interactive-comments-6768e.web.app/)
 
 ## My process
 
